@@ -90,3 +90,5 @@ Post-Processing Polish: Integration of Bloom, Vignette, and Color Grading to enh
 👨‍💻 About the Developer
 
 I am a Backend Engineer (AWS EMR Team) with a Computer Science degree, applying rigorous software engineering principles to game development. This project serves as a sandbox for implementing complex systems like distributed event handling and state management in a real-time environment.
+
+<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn Profile">
