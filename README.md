@@ -1,99 +1,67 @@
+# Souls Slasher: Modular Event-Driven Architecture in C#
+
+> A high-fidelity real-time simulation leveraging **Finite State Machines (FSM)**, **Observer Patterns**, and **Decoupled Input Systems**. This project demonstrates advanced Object-Oriented programming patterns to manage complex state transitions and component-based logic.
+
+**Architected by [Baseer Clark**](https://www.linkedin.com/in/baseer-clark1/)
 
 ---
 
-# Souls Slasher: A Technical Deep Dive into Action-RPG Systems
+## 🛠️ System Architecture
 
-> **Souls Slasher** is a high-fidelity, third-person action RPG focusing on precise combat mechanics, procedural arena generation, and a modular architecture. This project serves as a demonstration of advanced game development patterns, including decoupled input handling, finite state machines (FSM) for AI, and robust event-driven systems.
+### 1. Decoupled Input & Event Bus
 
-**Architected by [Baseer Clark](https://www.linkedin.com/in/baseer-clark1/) **
+Moving away from monolithic controllers, this project utilizes a **Command Pattern** approach to input handling.
 
----
+* **Input Buffering:** Implemented a queue-based buffer system (`InputHandler`) to decouple raw user input from execution logic, ensuring thread-safe responsiveness.
+* **State Isolation:** The `PlayerManager` acts as a central orchestrator, utilizing boolean flags to prevent race conditions between Locomotion, Combat, and Interaction states (e.g., locking input during specific animation frames).
 
-## 🎮 Core Features
+### 2. Finite State Machine (AI)
 
-### ⚔️ Precision Combat System
+Boss behaviors are governed by a **Hierarchical Finite State Machine**.
 
-* **"Perfect Parry" Mechanic:** Strict  timing windows that reward skill with frame-perfect damage immunity (I-Frames).
-* **Dynamic Hitboxes:** Differentiation between **Blocking** (stamina reduction) and **Parrying** (zero damage + VFX feedback).
-* **Stamina-Based Combos:** A tiered attack system with reset timers and resource management.
+* **State Logic:** Transitions are driven by distance heuristics and player context (e.g., switching from `ChasingState` to `StrafingState` based on NavMesh proximity).
+* **Polymorphic Design:** Utilizing interfaces (`IState`, `IEnemyAction`) to allow for modular expansion of enemy types without modifying the core behavior loop.
 
-### 🧠 Intelligent AI (Finite State Machine)
+### 3. Interface-Based Interaction (The "Parry" Logic)
 
-* **Poise Mechanics:** Bosses feature "super armor" and poise-breaking thresholds.
-* **Distance-Based Logic:** Adaptive behavior switching between **Strafing** (mid-range) and **Chasing** (long-range).
-* **Contextual UI:** Boss health bars dynamically reveal based on player proximity to enhance cinematic tension.
-
-### 🏗️ Procedural Generation & Systems
-
-* **Noise-Based Arenas:** Custom algorithm for circular arena generation with terrain deformation, ensuring valid **NavMesh** pathfinding.
-* **Manager-Centric Design:** Strict adherence to the **Single Responsibility Principle** by decoupling logic into specialized controllers.
-
----
-
-## 🛠️ Technical Architecture
-
-This project moves away from the "monolithic PlayerController" anti-pattern in favor of a **Modular Component Architecture**.
-
-### 1. Input & State Management
-
-* **`InputHandler`**: A dedicated script that buffers inputs to ensure responsiveness. It is completely decoupled from logic, acting only as a provider of flags (`rb_Input`, `rt_Input`).
-* **`PlayerManager`**: The central "Brain" that coordinates between Locomotion, Combat, and Stats. It manages high-level states like `isInteracting` or `isGrounded` to prevent state conflicts (e.g., preventing an attack animation while in a roll state).
-
-### 2. The Combat Loop (Sekiro-Style)
-
-The system is built on a "risk vs. reward" philosophy using an interface-driven approach.
-
-* **`WeaponHitbox.cs`**: A reusable component that uses an `AttemptParry()` interface to check the victim's state before applying damage.
-* **Invincibility Logic**: Rather than relying on physics layers which can be inconsistent, the system injects a temporary `isInvincible` flag into the locomotion state upon a successful parry.
+To solve the "Risk vs. Reward" timing window, the system uses an interface-driven contract rather than physics-based collisions alone.
 
 ```csharp
-// Snippet: Parry Logic ensuring 0 damage on perfect timing
+// Example: Interface implementation for deterministic state handling
 public bool AttemptParry(float damage)
 {
+    // Check internal state flag before calculating logic
     if (isParrying)
     {
-        // Force Invincibility to ensure NO damage leaks through
+        // Inject State: Grant temporary immunity (I-Frame logic)
         if (playerManager.playerLocomotion != null)
         {
             playerManager.playerLocomotion.isInvincible = true;
+            // Coroutine manages the lifecycle of the invincibility state
             StartCoroutine(ResetInvincibilityAfterParry());
         }
-        return true; // Signal to attacker that hit was deflected
+        return true; // Return successful interception to the caller
     }
-    return false; 
+    return false;
 }
 
 ```
 
-### 3. Camera & Locomotion
-
-* **Pivot-Based Camera:** Uses a hierarchical system (`CameraHolder` -> `CameraPivot` -> `Camera`) for independent rotation and collision detection using `SphereCast`.
-* **Dynamic Physics:** Implements a **Lock-On System** that toggles movement physics between "Free Look" (camera-relative) and "Strafing" (target-relative).
-
 ---
 
-## 📂 Project Structure
+## 📂 Project Structure (Modular Monolith)
+
+The codebase adheres to the **Single Responsibility Principle (SRP)**, separating concerns into distinct managers:
 
 ```text
-Assets/
-├── Game/
-│   ├── Scripts/
-│   │   ├── Managers/    # Global Systems (GameManager, SoundFX)
-│   │   ├── Player/      # Modular Logic (Locomotion, Combat, Input)
-│   │   ├── AI/          # Boss FSM and Behavior Trees
-│   │   ├── Items/       # ScriptableObjects & Weapon Logic
-│   │   └── UI/          # Dynamic HUD & Menu Systems
-│   ├── Prefabs/         # Pre-configured GameObjects
-│   └── Audio/           # Spatialized SFX and Music
+Assets/Scripts/
+├── Managers/       # Global State (GameManager, SoundManager)
+├── Controllers/    # Input & Camera Logic (Decoupled from logic)
+├── FSM/            # Abstract State Classes & Concrete Implementations
+└── Components/     # Reusable Logic (Health, Stamina, Hitbox)
 
 ```
 
 ---
 
-## 🚀 Future Roadmap
-
-* [ ] **Talent Tree Integration:** Node-based progression system for build diversity.
-* [ ] **Persistence:** JSON-based save/load system for character stats and world state.
-* [ ] **Visual Overhaul:** Integration of URP Post-Processing (Bloom, Vignette) for a dark fantasy aesthetic.
-
----
+**Final Advice:** Put the **Mini-Spark** project at the top of your resume/portfolio. Put this one second. It's the perfect "I'm also a well-rounded engineer" closer.
