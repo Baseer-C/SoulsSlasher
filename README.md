@@ -5,7 +5,7 @@
 
 > **Souls Slasher** is a high-fidelity, third-person action RPG focusing on precise combat mechanics, procedural arena generation, and a modular architecture. This project serves as a demonstration of advanced game development patterns, including decoupled input handling, finite state machines (FSM) for AI, and robust event-driven systems.
 
-**Architected by [Baseer Clark**](https://www.linkedin.com/in/baseer-clark1/)
+**Architected by [Baseer Clark](https://www.linkedin.com/in/baseer-clark1/) **
 
 ---
 
