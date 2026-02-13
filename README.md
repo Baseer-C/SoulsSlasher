@@ -1,6 +1,13 @@
-Souls Slasher: A Technical Deep Dive into Action-RPG Systems
 
-Souls Slasher is a high-fidelity, third-person action RPG developed in Unity, focusing on precise combat mechanics ("Sekiro-style" parrying), procedural arena generation, and a modular architecture designed for scalability. This project demonstrates advanced game development patterns including decoupled input handling, finite state machines for AI, and a robust event-driven architecture.
+# Souls Slasher: A Technical Deep Dive into Action-RPG Systems
+
+> Souls Slasher is a high-fidelity, third-person action RPG developed in Unity, focusing on precise combat mechanics ("Sekiro-style" parrying), procedural arena generation, and a modular architecture designed for scalability. This project demonstrates advanced game development patterns including decoupled input handling, finite state machines for AI, and a robust event-driven architecture.
+>
+> **Architected by [Baseer Clark](https://www.linkedin.com/in/baseer-clark1/)**
+
+---
+
+
 
 🎮 Core Features
 
@@ -87,8 +94,4 @@ Save/Load System: JSON-based persistence for character stats and world state.
 
 Post-Processing Polish: Integration of Bloom, Vignette, and Color Grading to enhance the dark fantasy atmosphere.
 
-👨‍💻 About the Developer
 
-I am a Backend Engineer (AWS EMR Team) with a Computer Science degree, applying rigorous software engineering principles to game development. This project serves as a sandbox for implementing complex systems like distributed event handling and state management in a real-time environment.
-
-<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn Profile">
