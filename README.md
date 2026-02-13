@@ -5,7 +5,7 @@
 **Architected by [Baseer Clark**](https://www.linkedin.com/in/baseer-clark1/)
 
 ---
-
+🔗 **[Watch the High-Resolution Technical Demo (MP4)](https://drive.google.com/file/d/1Y9B5GBRiwLajueEjWx-eESEoDSRby4g0/view?usp=sharing)**
 ## 🛠️ Technical Architecture
 
 This project moves away from the "monolithic PlayerController" anti-pattern in favor of a **Modular Component Architecture** adhering to the **Single Responsibility Principle (SRP)**.
